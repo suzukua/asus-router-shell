@@ -77,6 +77,12 @@ fi
 ########## EXCUTE START ##########
 
 SCRIPT_FOLDER=$(dirname $(readlink -f "$0"))/scripts
+
+#不存在scripts目录,创建
+if [ ! -d "$SCRIPT_FOLDER" ]; then
+  mkdir $SCRIPT_FOLDER
+fi
+
 for fileName  in ` ls $SCRIPT_FOLDER `
     do
         if [ -d $SCRIPT_FOLDER"/"$fileName  ]
