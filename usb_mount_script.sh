@@ -74,7 +74,26 @@ fi
 #
 ########## END ##########
 
+########## EXCUTE START ##########
 
+SCRIPT_FOLDER=$(dirname $(readlink -f "$0"))/scripts
+for fileName  in ` ls $SCRIPT_FOLDER `
+    do
+        if [ -d $SCRIPT_FOLDER"/"$fileName  ]
+        then
+             echo "跳过目录$SCRIPT_FOLDER/$fileName"
+        else
+          # echo $fileName
+        	if [[ ${fileName} == 'start-service.sh' ]]; 
+        	then
+		        echo "开始自动执行$SCRIPT_FOLDER/$fileName"
+                logger "开始自动执行$SCRIPT_FOLDER/$fileName"
+                sh $SCRIPT_FOLDER/$fileName &
+   	        fi
+        fi
+    done
+
+########## EXCUTE END ##########
 
 ########## NOTIFICATION ##########
 #
