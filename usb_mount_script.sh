@@ -83,13 +83,9 @@ for fileName  in ` ls $SCRIPT_FOLDER `
         then
              echo "跳过目录$SCRIPT_FOLDER/$fileName"
         else
-          # echo $fileName
-        	if [[ ${fileName} == 'start-service.sh' ]]; 
-        	then
-		        echo "开始自动执行$SCRIPT_FOLDER/$fileName"
-                logger "开始自动执行$SCRIPT_FOLDER/$fileName"
-                sh $SCRIPT_FOLDER/$fileName &
-   	        fi
+	     echo "开始自动执行$SCRIPT_FOLDER/$fileName"
+             logger "开始自动执行$SCRIPT_FOLDER/$fileName"
+             sh $SCRIPT_FOLDER/$fileName &
         fi
     done
 
