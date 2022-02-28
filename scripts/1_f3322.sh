@@ -43,7 +43,8 @@ write_cron_job(){
 kill_cron_job() {
         if [ -n "$(cru l | grep f3322)" ]; then
                 logger 删除f3322定时更新任务...
-                sed -i '/f3322/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
+                cru d f3322
+                #sed -i '/f3322/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
         fi
 }
 
