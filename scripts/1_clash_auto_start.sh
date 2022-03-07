@@ -15,4 +15,4 @@ sed -i '/export clashdir=*/'d $profile
 echo "export clashdir=\"$clashdir\"" >> $profile
 . /etc/profile
 #sleep 10
-. $clashdir/start.sh start
+sh $clashdir/start.sh start
