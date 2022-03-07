@@ -16,5 +16,5 @@ ip link add link eth0 name eth0.$LAN_VLAN_ID type vlan id $LAN_VLAN_ID
 ip link set eth0.$LAN_VLAN_ID up
 brctl addif br0 eth0.$LAN_VLAN_ID
 
-logger "lan通过br0桥接eth0成功"
+logger "lan已通过桥接eth0.$LAN_VLAN_ID"
 
