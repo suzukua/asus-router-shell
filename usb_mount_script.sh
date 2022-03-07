@@ -91,7 +91,7 @@ for fileName  in ` ls $SCRIPT_FOLDER `
         else
 	     echo "开始自动执行$SCRIPT_FOLDER/$fileName"
              logger "开始自动执行$SCRIPT_FOLDER/$fileName"
-             . $SCRIPT_FOLDER/$fileName
+             sh $SCRIPT_FOLDER/$fileName
         fi
     done
 
