@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# 此程序用于用untagged的vlan通过wan延伸lan.wan走tagged vlan(华硕原厂支持,lan-IPTV,在lan端口设置互联网VID),lan走untagged vlan
+# 单线复用wan口。wan走vlan(华硕原厂支持,lan-IPTV,在lan端口设置互联网VID),lan走untagged vlan
 # eth0 默认的wan
 #
 
