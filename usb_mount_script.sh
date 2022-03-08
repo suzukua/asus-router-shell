@@ -90,7 +90,7 @@ for fileName  in ` ls $SCRIPT_FOLDER `
              echo "跳过目录$SCRIPT_FOLDER/$fileName"
         else
 	     echo "开始自动执行$SCRIPT_FOLDER/$fileName"
-             logger "开始自动执行$SCRIPT_FOLDER/$fileName"
+             logger -st "($(basename $0))" $$ "开始自动执行$SCRIPT_FOLDER/$fileName"
              sh $SCRIPT_FOLDER/$fileName
         fi
     done
