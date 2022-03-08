@@ -16,3 +16,4 @@ echo "export clashdir=\"$clashdir\"" >> $profile
 . /etc/profile
 #sleep 10
 sh $clashdir/start.sh start
+logger -st "($(basename $0))" $$ "clash 启动脚本执行完成"
