@@ -16,12 +16,12 @@ start_f3322(){
         wget -q -O - $service > /tmp/f3322.txt
         if [ $? -eq 0 ]; then
                         if [ -z "$(cat /tmp/f3322.txt)" ]; then
-                                logger "[F3322]内容为空，请检查账号密码服务器是否准确"
+                                logger -st "($(basename $0))" $$ "[F3322]内容为空，请检查账号密码服务器是否准确"
                                 exit 1
                         else
                                 ftag=$(cat /tmp/f3322.txt)
                                 if [ "$ftag" == "!active" ] || [ "$ftag" == "nohost" ]; then
-                                        logger "[F3322]请检查账号密码服务器是否准确"
+                                        logger -st "($(basename $0))" $$ "[F3322]请检查账号密码服务器是否准确"
                                         exit 1
                                 fi
                         fi
@@ -50,11 +50,11 @@ kill_cron_job() {
 
 case $action in
 start)
-        logger "[F3322]: 开始执行F3322更新脚本，脚本会自动更新DDNS自动添加定时任务"
+        logger -st "($(basename $0))" $$ "[F3322]: 开始执行F3322更新脚本，脚本会自动更新DDNS自动添加定时任务"
         start_f3322
         ;;
 stop)
-        logger "stop_f3322"
+        logger -st "($(basename $0))" $$ "stop_f3322"
         stop_f3322
         ;;
 *)
