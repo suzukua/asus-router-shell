@@ -3,10 +3,10 @@
 华硕远程自启动脚本，适用于HND(AX86U/AX88U等)平台
 
 用法
-`
-nvram set script_usbmount=usb_mount_script.sh \n
-nvram commit
-`
+
+>nvram set script_usbmount=usb_mount_script.sh
+>
+>nvram commit
 
 脚本包含：
 
