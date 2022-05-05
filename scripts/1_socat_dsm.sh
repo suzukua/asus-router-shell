@@ -24,7 +24,6 @@ kill_cron_job() {
         if [ -n "$(cru l | grep socat_5001)" ]; then
                 logger "删除socat_5001定时更新任务..."
                 cru d socat_5001
-                #sed -i '/f3322/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
         fi
 }
 
