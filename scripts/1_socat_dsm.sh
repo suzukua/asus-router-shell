@@ -8,15 +8,19 @@ start_socat_5001() {
                 nohup socat TCP6-LISTEN:5001,reuseaddr,fork TCP4:192.168.100.4:5001 >/dev/null 2>&1 &
                 logger -st "($(basename $0))" $$ "启动成功：socat TCP6-LISTEN:5001,reuseaddr,fork TCP4:192.168.100.4:5001"
         fi
+        open_port_ip6tables
+        write_cron_job
+}
+
+open_port_ip6tables() {
+        #开放端口
         if [ -z "$(ip6tables -L -n |grep 5001)" ]; then
                 ip6tables -I INPUT -p tcp --dport 5001 -j ACCEPT
                 logger -st "($(basename $0))" $$ "ip6tables添加成功：ip6tables -I INPUT -p tcp --dport 5001 -j ACCEPT"
         fi
-        write_cron_job
 }
 
-
-write_cron_job(){
+write_cron_job() {
         #每x分钟检查一次
         if [ -z "$(cru l | grep socat_5001)" ]; then
                 cru a socat_5001  "*/$SOCAT_INTERVAL * * * * $(readlink -f "$0")"
