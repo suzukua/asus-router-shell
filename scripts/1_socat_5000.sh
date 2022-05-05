@@ -3,7 +3,7 @@
 # 更新间隔 分钟
 SOCAT_INTERVAL=99
 
-start_socat_5000(){
+start_socat_5000() {
         if [ -z "$(ps | grep socat | grep TCP6-LISTEN:5000)" ]; then
             nohup socat TCP6-LISTEN:5000,reuseaddr,fork TCP4:192.168.100.4:5000 >/dev/null 2>&1 &
             logger -st "($(basename $0))" $$ "启动成功：socat TCP6-LISTEN:5000,reuseaddr,fork TCP4:192.168.100.4:5000"
