@@ -5,12 +5,12 @@ SOCAT_INTERVAL=99
 
 start_socat_5000() {
         if [ -z "$(ps | grep socat | grep TCP6-LISTEN:5000)" ]; then
-            nohup socat TCP6-LISTEN:5000,reuseaddr,fork TCP4:192.168.100.4:5000 >/dev/null 2>&1 &
-            logger -st "($(basename $0))" $$ "启动成功：socat TCP6-LISTEN:5000,reuseaddr,fork TCP4:192.168.100.4:5000"
+                nohup socat TCP6-LISTEN:5000,reuseaddr,fork TCP4:192.168.100.4:5000 >/dev/null 2>&1 &
+                logger -st "($(basename $0))" $$ "启动成功：socat TCP6-LISTEN:5000,reuseaddr,fork TCP4:192.168.100.4:5000"
         fi
         if [ -z "$(ip6tables -L -n |grep 5000)" ]; then
-            ip6tables -I INPUT -p tcp --dport 5000 -j ACCEPT
-            logger -st "($(basename $0))" $$ "ip6tables添加成功：ip6tables -I INPUT -p tcp --dport 5000 -j ACCEPT"
+                ip6tables -I INPUT -p tcp --dport 5000 -j ACCEPT
+                logger -st "($(basename $0))" $$ "ip6tables添加成功：ip6tables -I INPUT -p tcp --dport 5000 -j ACCEPT"
         fi
 }
 
