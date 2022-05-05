@@ -11,6 +11,10 @@ start_socat_5000(){
             #write_cron_job
             logger -st "($(basename $0))" $$ "启动成功：socat TCP6-LISTEN:5000,reuseaddr,fork TCP4:192.168.100.4:5000"
         fi
+        if [ -z "$(ip6tables -L -n |grep 5000)" ]; then
+            ip6tables -I INPUT -p tcp --dport 5000 -j ACCEPT
+            logger -st "($(basename $0))" $$ "ip6tables添加成功：ip6tables -I INPUT -p tcp --dport 5000 -j ACCEPT"
+        fi
 }
 
 
