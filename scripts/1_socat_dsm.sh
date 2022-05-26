@@ -4,7 +4,7 @@
 SOCAT_INTERVAL=10
 
 start_socat_5001() {
-        if [ -z "$(ps | grep socat | grep TCP6-LISTEN:5001)" ]; then
+        if [ -z "$(ps | grep socat | grep TCP6-LISTEN:5001 | grep -v grep)" ]; then
                 nohup socat TCP6-LISTEN:5001,reuseaddr,fork TCP4:192.168.100.4:5001 >/dev/null 2>&1 &
                 logger -st "($(basename $0))" $$ "启动成功：socat TCP6-LISTEN:5001,reuseaddr,fork TCP4:192.168.100.4:5001"
         fi
