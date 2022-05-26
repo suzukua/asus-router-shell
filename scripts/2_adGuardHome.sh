@@ -5,7 +5,7 @@ INTERVAL=1
 
 start_service() {
         if [ -z "$(ps | grep AdGuardHome)" ]; then
-                 nohup /koolshare/adGuardHome/AdGuardHome -w /koolshare/adGuardHome -l syslog -c /jffs/.koolshare/adGuardHome/AdGuardHome.yaml >/dev/null 2>&1 &
+                nohup /koolshare/adGuardHome/AdGuardHome -w /var/adGuardHome -l syslog -c /koolshare/adGuardHome/AdGuardHome.yaml >/dev/null 2>&1 &
                 logger -st "($(basename $0))" $$ "启动成功：AdGuardHome"
         fi
         watch_dog
