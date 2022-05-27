@@ -19,6 +19,14 @@ watch_dog() {
         fi
 }
 
+write_dnsmasq_conf() {
+        #替换dnsmasq的上游dns为ad home
+        if [ -z "$(cat /etc/dnsmasq.conf |grep "server=127.0.0.1#53535")" ]; then
+                sed -i '/server=127/d' /etc/dnsmasq.conf
+                sed -i 's/server=.*/server=127.0.0.1#53535/g' /etc/dnsmasq.conf
+        fi
+}
+
 stop_watch_dog() {
         if [ -n "$(cru l | grep adGuardHome)" ]; then
                 logger "删除adGuardHome定时更新任务..."
