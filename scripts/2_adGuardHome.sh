@@ -3,6 +3,7 @@
 #开启 ad home，用iptables劫持53的流量到ad home的dns(没几分钟检查一次，防止被clash重写)
 # 更新间隔 分钟
 INTERVAL=1
+AD_DNS_PORT=53535
 
 start_service() {
         if [ -z "$(ps | grep AdGuardHome | grep -v grep)" ]; then
@@ -20,11 +21,18 @@ watch_dog() {
         fi
 }
 
-write_dnsmasq_conf() {
-        #替换dnsmasq的上游dns为ad home
-        if [ -z "$(cat /etc/dnsmasq.conf |grep "server=127.0.0.1#53535")" ]; then
-                sed -i '/server=127/d' /etc/dnsmasq.conf
-                sed -i 's/server=.*/server=127.0.0.1#53535/g' /etc/dnsmasq.conf
+check_iptables() {
+        #劫持dns53流量redirect到53535
+        if [ -z "$(iptables -t nat -L PREROUTING |grep REDIRECT | grep $INTERVAL)" ]; then
+                iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports $INTERVAL
+                iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports $INTERVAL
+                [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
+                [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53
+
+        fi
+        if [ -z "$(ip6tables -t nat -L PREROUTING |grep REDIRECT | grep $INTERVAL)" ]; then
+                ip6tables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports $INTERVAL
+                ip6tables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports $INTERVAL
         fi
 }
 
