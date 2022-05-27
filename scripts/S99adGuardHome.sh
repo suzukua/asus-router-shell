@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#开启 ad home，用iptables劫持53的流量到ad home的dns(没几分钟检查一次，防止被clash重写)
+#开启 ad home
 # 更新间隔 分钟
 INTERVAL=1
 AD_DNS_PORT=53535
