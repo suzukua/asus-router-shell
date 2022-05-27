@@ -1,5 +1,5 @@
 #!/bin/sh
-
+# 放到/koolshare/init.d/文件夹，赋予执行权限 chmod +x S99socatdsm.sh
 # 更新间隔 分钟
 SOCAT_INTERVAL=10
 
