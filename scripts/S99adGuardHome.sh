@@ -25,7 +25,7 @@ watch_dog() {
 check_conf() {
         #替换dnsmasq的上游dns为ad home
         if [ -z "$(cat /etc/dnsmasq.conf |grep "server=127.0.0.1#$AD_DNS_PORT")" ]; then
-                sed -i "s/server=.*/server=127.0.0.1#$AD_DNS_PORT/g" /etc/dnsmasq.conf
+                sed -i 's/server=.*/server=127.0.0.1#'$AD_DNS_PORT'/g' /etc/dnsmasq.conf
                 service restart_dnsmasq
         fi
 
