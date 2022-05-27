@@ -10,6 +10,7 @@ start_service() {
                 nohup /koolshare/adGuardHome/AdGuardHome -w /var/adGuardHome -l syslog -c /koolshare/adGuardHome/AdGuardHome.yaml >/dev/null 2>&1 &
                 logger -st "($(basename $0))" $$ "启动成功：AdGuardHome"
         fi
+        check_conf
         watch_dog
 }
 
@@ -21,19 +22,13 @@ watch_dog() {
         fi
 }
 
-check_iptables() {
-        #劫持dns53流量redirect到53535
-        if [ -z "$(iptables -t nat -L PREROUTING |grep REDIRECT | grep $INTERVAL)" ]; then
-                iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports $INTERVAL
-                iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports $INTERVAL
-                [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
-                [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53
+check_conf() {
+        #替换dnsmasq的上游dns为ad home
+        if [ -z "$(cat /etc/dnsmasq.conf |grep "server=127.0.0.1#$AD_DNS_PORT")" ]; then
+                sed -i "s/server=.*/server=127.0.0.1#$AD_DNS_PORT/g" /etc/dnsmasq.conf
+                service restart_dnsmasq
+        fi
 
-        fi
-        if [ -z "$(ip6tables -t nat -L PREROUTING |grep REDIRECT | grep $INTERVAL)" ]; then
-                ip6tables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports $INTERVAL
-                ip6tables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports $INTERVAL
-        fi
 }
 
 stop_watch_dog() {
