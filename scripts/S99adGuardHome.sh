@@ -23,9 +23,9 @@ watch_dog() {
 }
 
 check_conf() {
-        #替换dnsmasq的上游dns为ad home
-        if [ -z "$(cat /etc/dnsmasq.conf |grep "server=127.0.0.1#$AD_DNS_PORT")" ]; then
-                sed -i 's/server=.*/server=127.0.0.1#'$AD_DNS_PORT'/g' /etc/dnsmasq.conf
+        #禁用dnsmasq的dns功能,让adh监听到53端口接管dns，dhcp-option=lan,6下发ipv4的dns
+        if [ ! -f "/jffs/configs/dnsmasq.d/dnsmasq.conf.adh" ]; then
+                echo "port=0\ndhcp-option=lan,6,192.168.100.1" > /jffs/configs/dnsmasq.d/dnsmasq.conf.adh
                 service restart_dnsmasq
         fi
 
