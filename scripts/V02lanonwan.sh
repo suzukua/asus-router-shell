@@ -2,6 +2,7 @@
 #
 # 单线复用wan口。wan走vlan(华硕原厂支持,lan-IPTV,在lan端口设置互联网VID),lan走untagged vlan
 # eth0 默认的wan
+# 放到/koolshare/init.d目录即可, 调度脚本: /jffs/scripts/services-start -->/koolshare/bin/ks-services-start.sh
 #
 
 if [[ -z "$( brctl show | grep -o eth0 | sed -n 1p )" ]];
