@@ -4,14 +4,14 @@
 # 更新间隔 分钟
 INTERVAL=1
 AD_DNS_PORT=53535
-WORK_HOME="/var/adGuardHome"
+WORK_HOME="/tmp/adGuardHome"
 start_service() {
         check_conf
         if [ -z "$(ps | grep AdGuardHome | grep -v grep)" ]; then
                 if [ ! -d $WORK_HOME ]; then
                         mkdir $WORK_HOME
                 fi
-                nohup /koolshare/adGuardHome/AdGuardHome -w /var/adGuardHome -l syslog -c /koolshare/adGuardHome/AdGuardHome.yaml >/dev/null 2>&1 &
+                nohup /koolshare/adGuardHome/AdGuardHome -w $WORK_HOME -l syslog -c /koolshare/adGuardHome/AdGuardHome.yaml >/dev/null 2>&1 &
                 sleep 2s
                 if [ ! -z "$(pidof AdGuardHome)" -a ! -z "$(netstat -anp | grep AdGuardHome)" ] ; then
                     LOGGER "AdGuardHome 进程启动成功！(PID: $(pidof AdGuardHome))"
