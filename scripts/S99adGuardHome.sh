@@ -27,6 +27,8 @@ watch_dog() {
 
 check_conf() {
         #禁用dnsmasq的dns功能,让adh监听到53端口接管dns，dhcp-option=lan,6下发ipv4的dns
+#         dhcp-option=lan,6,192.168.1.1
+#         dhcp-option=lan,option6:23,[::]
         if [ ! -f "/jffs/configs/dnsmasq.d/dnsmasq.conf.adh" ]; then
                 echo -e "port=5533\ndhcp-option=lan,6,192.168.100.1" > /jffs/configs/dnsmasq.d/dnsmasq.conf.adh
                 service restart_dnsmasq
