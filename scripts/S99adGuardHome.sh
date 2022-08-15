@@ -6,6 +6,7 @@ INTERVAL=1
 AD_DNS_PORT=53535
 WORK_HOME="/var/adGuardHome"
 start_service() {
+        check_conf
         if [ -z "$(ps | grep AdGuardHome | grep -v grep)" ]; then
                 if [ ! -d $WORK_HOME ]; then
                         mkdir $WORK_HOME
@@ -13,7 +14,6 @@ start_service() {
                 nohup /koolshare/adGuardHome/AdGuardHome -w /var/adGuardHome -l syslog -c /koolshare/adGuardHome/AdGuardHome.yaml >/dev/null 2>&1 &
                 logger -st "($(basename $0))" $$ "启动成功：AdGuardHome"
         fi
-        check_conf
         watch_dog
 }
 
