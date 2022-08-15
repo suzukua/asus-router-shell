@@ -12,6 +12,13 @@ start_service() {
                         mkdir $WORK_HOME
                 fi
                 nohup /koolshare/adGuardHome/AdGuardHome -w /var/adGuardHome -l syslog -c /koolshare/adGuardHome/AdGuardHome.yaml >/dev/null 2>&1 &
+                sleep 2s
+                if [ ! -z "$(pidof AdGuardHome)" -a ! -z "$(netstat -anp | grep AdGuardHome)" ] ; then
+                    LOGGER "AdGuardHome 进程启动成功！(PID: $(pidof AdGuardHome))"
+                else
+                    LOGGER "AdGuardHome 进程启动失败！请检查配置"
+                    stop 
+                fi
                 logger -st "($(basename $0))" $$ "启动成功：AdGuardHome"
         fi
         watch_dog
@@ -36,11 +43,15 @@ check_conf() {
 
 }
 
-stop_watch_dog() {
+stop() {
+        if [ -f "/jffs/configs/dnsmasq.d/dnsmasq.conf.adh" ]; then
+                rm -rf/jffs/configs/dnsmasq.d/dnsmasq.conf.adh >/dev/null 2>&1 &
+                service restart_dnsmasq
+        fi
         if [ -n "$(cru l | grep adGuardHome)" ]; then
                 logger "删除adGuardHome定时更新任务..."
                 cru d adGuardHome
-        fi
+        fi 
 }
 
 case $action in
