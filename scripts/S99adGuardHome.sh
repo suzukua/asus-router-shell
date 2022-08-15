@@ -37,7 +37,7 @@ check_conf() {
 stop_watch_dog() {
         if [ -n "$(cru l | grep adGuardHome)" ]; then
                 logger "删除adGuardHome定时更新任务..."
-                cru d socat_5001
+                cru d adGuardHome
         fi
 }
 
