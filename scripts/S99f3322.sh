@@ -7,7 +7,7 @@ F3322_USER=""
 F3322_PASSWORD=""
 
 # 更新间隔 分钟
-F3322_INTERVAL=99
+F3322_INTERVAL=10
 
 start_f3322(){
         rm -rf /tmp/f3322.txt
