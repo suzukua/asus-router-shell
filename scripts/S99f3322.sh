@@ -12,7 +12,7 @@ F3322_INTERVAL=10
 start_f3322(){
         rm -rf /tmp/f3322.txt
         wan_ip=$(nvram get wan0_ipaddr)
-        service="http://$F3322_USER:$F3322_PASSWORD@members.3322.org/dyndns/update?hostname=$f3322_hostname&$wan_ip"
+        service="http://$F3322_USER:$F3322_PASSWORD@members.3322.org/dyndns/update?hostname=$F3322_HOST&$wan_ip"
         wget -q -O - $service > /tmp/f3322.txt
         if [ $? -eq 0 ]; then
                         if [ -z "$(cat /tmp/f3322.txt)" ]; then
