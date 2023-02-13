@@ -14,7 +14,6 @@ start_socat() {
     logger -st "($(basename $0))" $$ "启动成功 $name：socat TCP6-LISTEN:$port,reuseaddr,fork TCP4:$ip:$port"
   fi
   open_port_ip6tables "$port"
-  write_cron_job
 }
 
 open_port_ip6tables() {
@@ -63,6 +62,7 @@ batch_start_socat() {
     done
     start_socat "$name" "$ip" "$port"
   done
+  write_cron_job
 }
 
 case $action in
