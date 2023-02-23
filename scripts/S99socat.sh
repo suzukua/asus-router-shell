@@ -39,6 +39,16 @@ kill_cron_job() {
   fi
 }
 
+check_restart_upnp() {
+  upnppid=$(pidof miniupnpd)
+  #进程号小于10000，重启upnp
+  if [[ $upnppid -lt 10000 ]]; then
+    logger -st "($(basename $0))" $$ "原upnpn pid: ${upnppid}，开始重启UPNP..."
+    service restart_upnp
+    logger -st "($(basename $0))" $$ "重启UPNP完毕"
+  fi
+}
+
 
 batch_start_socat() {
   for item in $(echo ${SOCAT_FORWARDS} | awk '{split($0,arr,",");for(i in arr) print arr[i]}')
@@ -62,6 +72,7 @@ batch_start_socat() {
     done
     start_socat "$name" "$ip" "$port"
   done
+  check_restart_upnp
   write_cron_job
 }
 
