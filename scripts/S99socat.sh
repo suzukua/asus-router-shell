@@ -1,6 +1,7 @@
 #!/bin/sh
 # 放到/koolshare/init.d/文件夹，赋予执行权限 chmod +x S99socat.sh  /jffs/scripts/wan-start >> /koolshare/bin/ks-wan-start.sh
 # 更新间隔 分钟
+# 重启UPNP，解决UPNP不稳定问题
 SOCAT_INTERVAL=10
 SOCAT_FORWARDS=dsm:192.168.100.4:5001,emby:192.168.100.6:8096
 
