@@ -1,6 +1,5 @@
 #!/bin/sh
 # 开启后重启一次WiFi，解决AX86U部分物联网设备连接WiFi无法上网(无法获取IP)的问题
-# 重启UPNP，解决UPNP不稳定问题
 
 logger -st "($(basename $0))" $$ "开始执行重启WiFi，等待10s之后执行"
 sleep 10
@@ -21,7 +20,3 @@ logger -st "($(basename $0))" $$ "开启WiFi..."
 radio on
 service restart_wireless
 logger -st "($(basename $0))" $$ "重启WiFi完毕"
-
-logger -st "($(basename $0))" $$ "开始重启UPNP..."
-service restart_upnp
-logger -st "($(basename $0))" $$ "重启UPNP完毕"
