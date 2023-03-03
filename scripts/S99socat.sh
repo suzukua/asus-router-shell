@@ -44,7 +44,7 @@ check_restart_upnp() {
   upnppid=$(pidof miniupnpd)
   echo "upnppid进程号${upnppid}"
   #进程号小于10000，重启upnp
-  if [ -z "$upnppid" ] || [ $upnppid -gt 10000 ]; then
+  if [ -z "$upnppid" ] || [ $upnppid -lt 10000 ]; then
     logger -st "($(basename $0))" $$ "原upnpn pid: ${upnppid}，开始重启UPNP..."
     service restart_upnp
     logger -st "($(basename $0))" $$ "重启UPNP完毕"
