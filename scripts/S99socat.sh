@@ -74,7 +74,7 @@ batch_start_socat() {
     done
     start_socat "$name" "$ip" "$port"
   done
-  check_restart_upnp
+#   check_restart_upnp
   write_cron_job
 }
 
