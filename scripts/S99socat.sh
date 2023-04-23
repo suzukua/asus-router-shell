@@ -3,7 +3,7 @@
 # 更新间隔 分钟
 # 重启UPNP，解决UPNP不稳定问题
 SOCAT_INTERVAL=10
-SOCAT_FORWARDS=dsm:192.168.100.4:5001,emby:192.168.100.6:8096
+SOCAT_FORWARDS=dsm:192.168.100.4:5001
 
 start_socat() {
   name=$1
