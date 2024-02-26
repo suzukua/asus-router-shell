@@ -1,7 +1,7 @@
 #!/bin/sh
 # 放到/koolshare/init.d/文件夹，赋予执行权限 chmod +x S99socat.sh  /jffs/scripts/wan-start >> /koolshare/bin/ks-wan-start.sh
-# 更新间隔 分钟
-# 重启UPNP，解决UPNP不稳定问题
+# 用于将公网IPV6端口转发到内网
+
 SOCAT_INTERVAL=10
 SOCAT_FORWARDS=dsm:192.168.100.4:5001
 
@@ -39,18 +39,6 @@ kill_cron_job() {
     cru d socat_check
   fi
 }
-
-check_restart_upnp() {
-  upnppid=$(pidof miniupnpd)
-  echo "upnppid进程号${upnppid}"
-  #进程号小于10000，重启upnp
-  if [ -z "$upnppid" ] || [ $upnppid -lt 10000 ]; then
-    logger -st "($(basename $0))" $$ "原upnpn pid: ${upnppid}，开始重启UPNP..."
-    service restart_upnp
-    logger -st "($(basename $0))" $$ "重启UPNP完毕"
-  fi
-}
-
 
 batch_start_socat() {
   for item in $(echo ${SOCAT_FORWARDS} | awk '{split($0,arr,",");for(i in arr) print arr[i]}')
