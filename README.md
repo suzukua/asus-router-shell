@@ -13,6 +13,8 @@
 + 3322DDNS
 + shellClash
 + 单臂路由(vlan lan/vlan wan)
++ 电信 IPTV DHCP网卡(V04iptv.sh)
++ IPV6转V4(S99socat.sh)
 
 
 部分代码来自于: 
