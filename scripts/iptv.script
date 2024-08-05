@@ -1,0 +1,51 @@
+#!/bin/sh 
+# udhcpc 允许获取IPTV网口或释放IP时会调用此脚本，用于配置或清理IP、route、iptables等
+[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
+ 
+RESOLV_CONF="/etc/resolv.conf"
+[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+[ -n "$subnet" ] && NETMASK="netmask $subnet"
+
+# echo "$1"
+# echo ======1
+# echo "$interface"
+# echo ======2
+# echo "$ip"
+# echo ======3
+# echo "$NETMASK"
+# echo ======4
+# if [ -n "$router" ] ; then
+      
+#   for i in $router ; do
+#     echo "$i" 
+#   done
+# fi
+# echo ======5
+# case "$1" in
+
+case "$1" in
+  deconfig)
+    /sbin/ifconfig $interface 0.0.0.0
+    ;;
+ 
+  renew|bound)
+    /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+ 
+    if [ -n "$router" ] ; then
+      echo "deleting routers"
+      while route del default gw 0.0.0.0 dev $interface metric 1 ; do
+        :
+      done
+      route del -net 182.139.0.0 netmask 255.255.0.0 gw 10.184.64.1
+      iptables -t nat -D POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE
+ 
+      for i in $router ; do
+        route add default gw $i dev $interface metric 1
+      done
+      route add -net 182.139.0.0 netmask 255.255.0.0 gw 10.184.64.1
+      iptables -t nat -A POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE
+    fi
+    ;;
+esac
+ 
+exit 0
