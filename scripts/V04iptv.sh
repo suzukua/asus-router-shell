@@ -20,7 +20,10 @@ PID_FILE="/var/run/udhcpc_iptv.pid"
 if [ -f "$PID_FILE" ]; then
     PID=$(cat "$PID_FILE")
     if [ -d "/proc/$PID" ]; then
+        echo "udhcpc is running with PID $PID. release ip..."
+        kill -SIGUSR2 `cat $PID_FILE `
         echo "udhcpc is running with PID $PID. Stopping it..."
+        sleep 1
         kill "$PID"
         # Wait for the process to stop
         sleep 1
@@ -34,4 +37,4 @@ fi
 
 # Start udhcpc
 # 0x3d clientid
-udhcpc -b -i eth0.43 -p "$PID_FILE" -s /koolshare/init.d/iptv.script -x hostname:XXXXX -x 0x3d:XXX -V SCITV -A5
+udhcpc -b -i eth0.43 -p "$PID_FILE" -s $PID_FILE -x hostname:XXXXX -x 0x3d:XXX -V SCITV -A5
