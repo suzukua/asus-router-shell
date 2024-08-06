@@ -37,4 +37,5 @@ fi
 
 # Start udhcpc
 # 0x3d clientid
-udhcpc -b -i eth0.43 -p "$PID_FILE" -s /koolshare/init.d/iptv.script -x hostname:XXXXX -x 0x3d:XXX -V SCITV -A5
+udhcpc -b -i eth0.43 -p "$PID_FILE" -s /koolshare/init.d/iptv.script -x hostname:XXXXX -x 0x3d:XXX -V SCITV -A5 --syslog
+
