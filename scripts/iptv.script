@@ -17,7 +17,7 @@ case "$1" in
     /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
  
     if [ -n "$router" ] ; then
-      echo "deleting routers"
+      logger -st "($(basename $0))" $$ "deleting routers"
       while route del default gw 0.0.0.0 dev $interface metric 1 >/dev/null 2>&1 ; do
         :
       done
@@ -29,11 +29,12 @@ case "$1" in
       done
       route add -net 182.139.0.0 netmask 255.255.0.0 gw 10.184.64.1
       iptables -t nat -A POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE
+      logger -st "($(basename $0))" $$ "$interface $ip $BROADCAST $NETMASK  Bound OK"
     fi
     ;;
 
   renew)
-    echo "$0 renew, $interface $ip ..."
+    logger -st "($(basename $0))" $$ "$0 renew, $interface $ip ..."
     /sbin/ifconfig $interface $ip $BROADCAST $NETMASK    
     ;;
 
