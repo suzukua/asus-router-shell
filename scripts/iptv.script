@@ -35,7 +35,9 @@ case "$1" in
 
   renew)
     logger -st "($(basename $0))" $$ "$0 renew, $interface $ip ..."
-    /sbin/ifconfig $interface $ip $BROADCAST $NETMASK    
+    iptables -t nat -D POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE >/dev/null 2>&1
+    /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+    iptables -t nat -A POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE    
     ;;
 
 esac
