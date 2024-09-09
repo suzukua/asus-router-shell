@@ -23,10 +23,9 @@ unset_lock() {
 }
 
 add_system_event_sh() {
-  LOGGER "创建自动运行&以及系统事件回调脚本"
   current_file=$(pwd)/$(basename "$0")
-  [ ! -L "/koolshare/init.d/V03iptv.sh" ] && ln -sf $current_file /koolshare/init.d/V03iptv.sh
-  [ ! -L "/koolshare/init.d/N03iptv.sh" ] && ln -sf $current_file /koolshare/init.d/N03iptv.sh
+  [ ! -e "/koolshare/init.d/V03iptv.sh" ] && ln -sf $current_file /koolshare/init.d/V03iptv.sh
+  [ ! -e "/koolshare/init.d/N03iptv.sh" ] && ln -sf $current_file /koolshare/init.d/N03iptv.sh
 }
 
 add_interface() {
