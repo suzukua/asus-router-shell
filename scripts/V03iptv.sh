@@ -17,12 +17,12 @@ PID_FILE="/var/run/udhcpc_iptv.pid"
 LOCK_FILE=/var/lock/iptv.lock
 
 set_lock() {
-  exec 2000>"$LOCK_FILE"
-  flock -x 2000
+  exec 999>"$LOCK_FILE"
+  flock -x 999
 }
 
 unset_lock() {
-  flock -u 2000
+  flock -u 999
   rm -rf "$LOCK_FILE"
 }
 
