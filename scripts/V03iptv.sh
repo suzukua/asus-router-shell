@@ -34,7 +34,7 @@ add_interface() {
       ip link add link eth0 name "$INTERFACE" type vlan id $LAN_VLAN_ID
       ip link set "$INTERFACE" up
       # set MAC
-      ip link set dev "$INTERFACE" address C4:FF:1F:59:B8:0E
+      ip link set dev "$INTERFACE" address 01:00:00:00:00:00
   else
       logger -st "($(basename $0))" $$ "Interface $INTERFACE already exists."
   fi
