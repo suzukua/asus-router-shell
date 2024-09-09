@@ -2,6 +2,10 @@
 # 启动IPTV 网口, eth0.43
 # 放置于任何目录都可以, 建议放到 /koolshare/init.d/ 目录下.开机自动运行, 网络变化自适应.
 
+IPTV_MAC="00:00:00:00:00:00" # 请填写IPTV盒子的MAC地址
+IPTV_HOSTNAME="XXXXX"  # 请填写IPTV盒子的主机名
+IPTV_CLIENTID="XXXXX" # 请填写IPTV盒子的ClientID,一般情况下是mac地址
+
 # vlan UP
 LAN_VLAN_ID=43
 INTERFACE="eth0.$LAN_VLAN_ID"
@@ -34,7 +38,7 @@ add_interface() {
       ip link add link eth0 name "$INTERFACE" type vlan id $LAN_VLAN_ID
       ip link set "$INTERFACE" up
       # set MAC
-      ip link set dev "$INTERFACE" address 01:00:00:00:00:00
+      ip link set dev "$INTERFACE" address $IPTV_MAC
   else
       logger -st "($(basename $0))" $$ "Interface $INTERFACE already exists."
   fi
@@ -60,7 +64,7 @@ start_dhcp() {
   fi
   # Start udhcpc
   # 0x3d clientid
-  udhcpc -b --syslog -i eth0.43 -p "$PID_FILE" -s /koolshare/init.d/iptv.script -x hostname:XXXXX -x 0x3d:XXX -V SCITV -A5
+  udhcpc -b --syslog -i eth0.43 -p "$PID_FILE" -s /koolshare/init.d/iptv.script -x hostname:$IPTV_HOSTNAME -x 0x3d:$IPTV_CLIENTID -V SCITV -A5
 }
 
 # 1,加锁, 防止并发
