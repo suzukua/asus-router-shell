@@ -12,7 +12,7 @@
 
 + 3322DDNS
 + shellClash
-+ 单臂路由(vlan lan/vlan wan)
++ 单线复用 (vlan lan/vlan wan)
 + 电信 IPTV 支持(V03iptv.sh)
 + IPV6转V4(S99socat.sh)
 
