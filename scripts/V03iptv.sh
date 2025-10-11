@@ -62,7 +62,7 @@ start_dhcp() {
         rm -f "$PID_FILE"
     fi
   fi
-  RUN_PID=$(ps | grep 'udhcpc' | grep "$INTERFACE" | grep -v 'grep' | awk '{print $1}')
+  RUN_PID=$(ps | grep "udhcpc" | grep "$INTERFACE" | grep -v "grep" | awk '{print $1}')
   if [ -n "$RUN_PID" ]; then
     kill -9 "$RUN_PID"
   fi
