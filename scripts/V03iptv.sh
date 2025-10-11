@@ -62,6 +62,10 @@ start_dhcp() {
         rm -f "$PID_FILE"
     fi
   fi
+  RUN_PID=$(ps | grep 'udhcpc' | grep "$INTERFACE" | grep -v 'grep' | awk '{print $1}')
+  if [ -n "$RUN_PID" ]; then
+    kill -9 "$RUN_PID"
+  fi
   # Start udhcpc
   # 0x3d clientid
   udhcpc -b --syslog -i "$INTERFACE" -p "$PID_FILE" -s /koolshare/init.d/iptv.script -x hostname:$IPTV_HOSTNAME -x 0x3d:$IPTV_CLIENTID -V SCITV -A5
