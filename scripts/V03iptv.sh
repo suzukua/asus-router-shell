@@ -64,7 +64,7 @@ start_dhcp() {
   fi
   # Start udhcpc
   # 0x3d clientid
-  udhcpc -b --syslog -i eth0.43 -p "$PID_FILE" -s /koolshare/init.d/iptv.script -x hostname:$IPTV_HOSTNAME -x 0x3d:$IPTV_CLIENTID -V SCITV -A5
+  udhcpc -b --syslog -i "$INTERFACE" -p "$PID_FILE" -s /koolshare/init.d/iptv.script -x hostname:$IPTV_HOSTNAME -x 0x3d:$IPTV_CLIENTID -V SCITV -A5
 }
 
 # 1,加锁, 防止并发
