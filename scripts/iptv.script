@@ -4,7 +4,6 @@
 
 logger -st "($(basename $0))" $$ "event: $1"
 
-RESOLV_CONF="/etc/resolv.conf"
 [ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
 [ -n "$subnet" ] && NETMASK="netmask $subnet"
 
@@ -30,7 +29,16 @@ case "$1" in
       route add -net 182.139.0.0 netmask 255.255.0.0 gw 10.184.64.1
       iptables -t nat -A POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE
       logger -st "($(basename $0))" $$ "$interface $ip $BROADCAST $NETMASK  Bound OK"
+      if which udpxy >/dev/null 2>&1; then
+        UDPXY_PID=$(ps | grep "udpxy" | grep "$interface" | grep -v "grep" | awk '{print $1}')
+        if [ -n "$UDPXY_PID" ]; then
+          kill -9 "$UDPXY_PID"
+        fi
+        udpxy -m $interface -p 4022 -B 2Mb -a br0
+        logger -st "($(basename $0))" $$ "udpxy started($interface)"
+      fi
     fi
+
     ;;
 
   renew)
@@ -38,6 +46,14 @@ case "$1" in
     iptables -t nat -D POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE >/dev/null 2>&1
     /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
     iptables -t nat -A POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE    
+    if which udpxy >/dev/null 2>&1; then
+      UDPXY_PID=$(ps | grep "udpxy" | grep "$interface" | grep -v "grep" | awk '{print $1}')
+      if [ -n "$UDPXY_PID" ]; then
+      else
+        udpxy -m $interface -p 4022 -B 2Mb -a br0
+        logger -st "($(basename $0))" $$ "udpxy restarted($interface)"
+      fi 
+    fi
     ;;
 
 esac
