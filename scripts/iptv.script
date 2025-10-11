@@ -1,5 +1,5 @@
 #!/bin/sh 
-# udhcpc 允许获取IPTV网口或释放IP时会调用此脚本，用于配置或清理IP、route、iptables等
+# udhcpc 获取IPTV网口或释放IP时会调用此脚本，用于配置或清理IP、route、iptables、重启udpxy等
 [ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
 
 logger -st "($(basename $0))" $$ "event: $1"
