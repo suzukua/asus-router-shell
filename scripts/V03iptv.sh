@@ -64,7 +64,8 @@ start_dhcp() {
   fi
   RUN_PID=$(ps | grep "udhcpc" | grep "$INTERFACE" | grep -v "grep" | awk '{print $1}')
   if [ -n "$RUN_PID" ]; then
-    kill -9 "$RUN_PID"
+    kill -SIGUSR2 $RUN_PID
+    kill -9 $RUN_PID >/dev/null 2>&1
   fi
   # Start udhcpc
   # 0x3d clientid
