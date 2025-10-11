@@ -1,5 +1,6 @@
 #!/bin/sh 
 # udhcpc 获取IPTV网口或释放IP时会调用此脚本，用于配置或清理IP、route、iptables、重启udpxy等
+# 已内置启动udpxy, 端口4022(监听br0), 需要打开华硕理由IPTV页面的特殊应用程序
 [ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
 
 logger -st "($(basename $0))" $$ "event: $1"
