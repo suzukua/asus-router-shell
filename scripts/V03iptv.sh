@@ -1,6 +1,7 @@
 #!/bin/sh
 # 启动IPTV 网口, eth0.43
 # 放置于任何目录都可以, 建议放到 /koolshare/init.d/ 目录下.开机自动运行, 网络变化自适应.
+# 已内置启动udpxy, 端口4022(监听br0), 需要打开华硕理由IPTV页面的特殊应用程序
 
 IPTV_MAC="00:00:00:00:00:00" # 请填写IPTV盒子的MAC地址
 IPTV_HOSTNAME="XXXXX"  # 请填写IPTV盒子的主机名
