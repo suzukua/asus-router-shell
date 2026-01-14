@@ -1,6 +1,6 @@
 #!/bin/sh 
 # udhcpc 获取IPTV网口或释放IP时会调用此脚本，用于配置或清理IP、route、iptables、重启udpxy等
-# 已内置启动udpxy, 端口4022(监听br0), 需要打开华硕理由IPTV页面的特殊应用程序(切勿填写UDP代理/udpxy，由本脚本管理udpxy进程)
+# 优先启动rtp2httpd(可执行文件存放于/koolshare/bin/或者/koolshare/scripts目录);没有rtp2httpd则尝试启动udpxy.监听br0,4022端口
 
 [ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
 
@@ -8,6 +8,40 @@ logger -st "($(basename $0))" $$ "event: $1"
 
 [ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
 [ -n "$subnet" ] && NETMASK="netmask $subnet"
+
+startIf_udpxy() {
+  mcastInterface="$1"
+  # 未安装 udpxy 直接返回
+  if ! which udpxy >/dev/null 2>&1; then
+    return 1
+  fi
+  # 查找并杀掉已存在的 udpxy 进程（同接口）
+  pidof udpxy | xargs -r kill -9
+  # 启动 udpxy
+  udpxy -m "$mcastInterface" -p 4022 -B 2Mb -a br0
+  # 记录日志
+  logger -st "($(basename "$0"))" $$ "udpxy started($mcastInterface)"
+  return 0
+}
+
+startIf_rtp2httpd() {
+  mcastInterface="$1"
+  # 未安装 rtp2httpd 直接返回
+  if ! which rtp2httpd >/dev/null 2>&1; then
+    return 1
+  fi
+  # 查找并杀掉已存在的 rtp2httpd 进程（同接口）
+  pidof rtp2httpd | xargs -r kill -9
+  # 启动 rtp2httpd
+  nohup rtp2httpd --noconfig --listen 4022 --upstream-interface-multicast $mcastInterface --upstream-interface-fcc $mcastInterface --upstream-interface-rtsp $mcastInterface >/tmp/rtp2httpd.log 2>&1 &
+  # 记录日志
+  logger -st "($(basename "$0"))" $$ "rtp2httpd started($mcastInterface)"
+  return 0
+}
+
+selectProxyStart() {
+	startIf_rtp2httpd "$1" || startIf_udpxy "$1"
+}
 
 case "$1" in
   deconfig)
@@ -31,14 +65,7 @@ case "$1" in
       route add -net 182.139.0.0 netmask 255.255.0.0 gw 10.184.64.1
       iptables -t nat -A POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE
       logger -st "($(basename $0))" $$ "$interface $ip $BROADCAST $NETMASK  Bound OK"
-      if which udpxy >/dev/null 2>&1; then
-        UDPXY_PID=$(ps | grep "udpxy" | grep "$interface" | grep -v "grep" | awk '{print $1}')
-        if [ -n "$UDPXY_PID" ]; then
-          kill -9 "$UDPXY_PID"
-        fi
-        udpxy -m $interface -p 4022 -B 2Mb -a br0
-        logger -st "($(basename $0))" $$ "udpxy started($interface)"
-      fi
+      selectProxyStart $interface
     fi
 
     ;;
@@ -48,13 +75,7 @@ case "$1" in
     iptables -t nat -D POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE >/dev/null 2>&1
     /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
     iptables -t nat -A POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE    
-    if which udpxy >/dev/null 2>&1; then
-      UDPXY_PID=$(ps | grep "udpxy" | grep "$interface" | grep -v "grep" | awk '{print $1}')
-      if [ -z "$UDPXY_PID" ]; then
-        udpxy -m $interface -p 4022 -B 2Mb -a br0
-        logger -st "($(basename $0))" $$ "udpxy restarted($interface)"
-      fi 
-    fi
+    selectProxyStart $interface
     ;;
 
 esac
