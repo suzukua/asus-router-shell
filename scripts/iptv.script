@@ -57,13 +57,17 @@ case "$1" in
         :
       done
       route del -net 182.139.0.0 netmask 255.255.0.0 gw 10.184.64.1 >/dev/null 2>&1
+      route del -net 118.123.185.0 netmask 255.255.255.0 gw 10.184.64.1 >/dev/null 2>&1
       iptables -t nat -D POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE >/dev/null 2>&1
+      iptables -t nat -D POSTROUTING -d 118.123.185.0/24 -o $interface -j MASQUERADE >/dev/null 2>&1
  
       for i in $router ; do
         route add default gw $i dev $interface metric 1
       done
       route add -net 182.139.0.0 netmask 255.255.0.0 gw 10.184.64.1
+      route add -net 118.123.185.0 netmask 255.255.255.0 gw 10.184.64.1
       iptables -t nat -A POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE
+      iptables -t nat -A POSTROUTING -d 118.123.185.0/24 -o $interface -j MASQUERADE
       logger -st "($(basename $0))" $$ "$interface $ip $BROADCAST $NETMASK  Bound OK"
       selectProxyStart $interface
     fi
@@ -73,8 +77,10 @@ case "$1" in
   renew)
     logger -st "($(basename $0))" $$ "$0 renew, $interface $ip ..."
     iptables -t nat -D POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE >/dev/null 2>&1
+    iptables -t nat -D POSTROUTING -d 118.123.185.0/24 -o $interface -j MASQUERADE >/dev/null 2>&1
     /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
-    iptables -t nat -A POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE    
+    iptables -t nat -A POSTROUTING -d 182.139.0.0/16 -o $interface -j MASQUERADE
+    iptables -t nat -A POSTROUTING -d 118.123.185.0/24 -o $interface -j MASQUERADE
     selectProxyStart $interface
     ;;
 
