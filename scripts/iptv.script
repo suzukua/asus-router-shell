@@ -33,8 +33,7 @@ startIf_rtp2httpd() {
   # 查找并杀掉已存在的 rtp2httpd 进程（同接口）
   pidof rtp2httpd | xargs -r kill -9
   # 启动 rtp2httpd
-  nohup rtp2httpd --noconfig --listen 4022 --upstream-interface-multicast eth0.43 --upstream-interface-fcc eth0.43 --upstream-interfa
-ce-rtsp eth0.43 --external-m3u https://iptv.zsdc.eu.org/home/apt_iptv.m3u8 >/tmp/rtp2httpd.log 2>&1 &
+  nohup rtp2httpd --noconfig --listen 4022 --upstream-interface-multicast eth0.43 --upstream-interface-fcc eth0.43 --upstream-interface-rtsp eth0.43 --external-m3u https://iptv.zsdc.eu.org/home/apt_iptv.m3u8 >/tmp/rtp2httpd.log 2>&1 &
   # 记录日志
   logger -st "($(basename "$0"))" $$ "rtp2httpd started($mcastInterface)"
   return 0
