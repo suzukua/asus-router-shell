@@ -22,6 +22,3 @@
 [JACK-THINK](https://github.com/JACK-THINK/SCRIPTS-BOOTLOADER-FOR-ASUS-ROUTER/)
 
 以及MC作者
-
-## Stargazers over time
-[![Stargazers over time](https://starchart.cc/suzukua/asus-router-shell.svg?variant=adaptive)](https://github.com/suzukua/asus-router-shell)
