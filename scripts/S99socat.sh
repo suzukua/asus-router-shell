@@ -1,4 +1,3 @@
-```sh
 #!/bin/sh
 # 放到 /koolshare/init.d/ 文件夹
 # chmod +x S99socat.sh
@@ -287,4 +286,3 @@ restart)
     ;;
 
 esac
-```
