@@ -66,6 +66,7 @@ batch_start_socat() {
   write_cron_job
 }
 
+action=$1
 case $action in
 start)
         logger -st "($(basename $0))" $$ "[socat_dsm]: 开始执行socat_dsm脚本"
